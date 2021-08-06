@@ -1,0 +1,31 @@
+{
+    "name": "webbird/journal",
+    "type": "standard",
+    "description": "",
+    "license": "",
+    "repositories": [
+        {
+			"type": "vcs",
+			"url": "https://github.com/webbird/i18n"
+		},
+        {
+			"type": "vcs",
+			"url": "https://github.com/webbird/cmsbridge"
+		},
+        {
+			"type": "vcs",
+			"url": "https://github.com/webbird/common"
+		}
+	],
+    "require": {
+        "league/plates": "3.*",
+        "webbird/i18n": "dev-main",
+        "webbird/cmsbridge": "dev-main",
+        "webbird/common": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "webbird\\journal\\": "src"
+        }
+    }
+}
