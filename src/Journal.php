@@ -13,7 +13,7 @@ class Journal
 {
     const VERSION = '0.1';
     
-    protected object $bridge;
+    public    object $bridge;
     protected object $db;
     protected object $te;
     protected object $i18n;
@@ -42,7 +42,7 @@ class Journal
     public function __construct()
     {
         // initialize CMSBridge
-        $this->bridge = new \webbird\cmsbridge\Bridge(__DIR__.'/../../..');
+        $this->bridge = new \webbird\cmsbridge\Bridge();
         // initialize constants
         define('CMS_NAME',$this->bridge->getCMSName());
         // initialize DB connection
@@ -67,6 +67,28 @@ class Journal
         });
     }
     
+    public function db()
+    {
+        return $this->db;
+    }
+    
+    public function getArticles(int $sectionID) : array
+    {
+        $articles = [];
+        $queryBuilder = $this->db()->createQueryBuilder();
+        $queryBuilder
+            ->select('article_id')
+            ->from($this->bridge->getDBPrefix().Journal\Article::$tablename)
+            ->where('section_id = ?')
+            ->setParameter(0, $sectionID)
+        ;
+        $stmt = $queryBuilder->execute();
+        while (($row = $stmt->fetchAssociative()) !== false) {
+            $articles[] = new Journal\Article(intval($row['article_id']), $this);
+        }
+        return $articles;
+    }
+    
     /**
      * 
      * @param string $key
@@ -79,13 +101,16 @@ class Journal
     
     /**
      * 
-     * @param int $section_id
+     * @param int $sectionID
      */
-    public function modify(int $section_id) : void
+    public function modify(int $sectionID) : void
     {
         $data = array(
             'curr_tab' => 'articles',
-            'edit_url' => 'x'
+            'edit_url' => 'x',
+            // get articles
+            'articles' => $this->getArticles($sectionID),
+            
         );
         echo $this->te->render('modify', array('data'=>$data));
     }
