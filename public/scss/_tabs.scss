@@ -1,112 +1,97 @@
 /* ===== MAIN TABS ===== */
 div.mod_journal div.tabs nav ol,
 div.mod_journal div.tabs nav ul {
-  list-style: none;
+    list-style: none;
 }
 div.mod_journal div.tabs nav {
-  text-align: center;
-}
-div.mod_journal div.tabs nav {
-  height: 36px;
-  background: #464b4c;
-  border-top: 1px solid #353939;
-  border-bottom: 1px solid #2e3131;
-  background-image: linear-gradient(to bottom, #464b4c, #3f4344);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
-}
-div.mod_journal div.tabs nav a {
-  transition: 0.1s ease-out;
-  transition-property: background-color, line-height;
+    text-align: center;
+    height: 36px;
+    background: #464b4c;
+    border-top: 1px solid #353939;
+    border-bottom: 1px solid #2e3131;
+    background-image: linear-gradient(to bottom, #464b4c, #3f4344);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
 }
 div.mod_journal div.tabs nav ul {
-  float: left;
-  border-left: 1px solid #353939;
-  border-left: 1px solid rgba(0, 0, 0, 0.2);
-  border-right: 1px solid #4d5354;
-  border-right: 1px solid rgba(255, 255, 255, 0.06);
+    float: left;
+    border-left: 1px solid rgba(53, 57, 57, 0.2);
+    border-right: 1px solid #4d5354;
 }
 div.mod_journal div.tabs nav li {
-  float: left;
-  margin-left: 0;
+    float: left;
+    margin-left: 0;
 }
 div.mod_journal div.tabs nav a {
-  display: block;
-  padding: 0 20px;
-  line-height: 36px;
-  color: #ddd;
-  text-decoration: none;
-  text-shadow: 0 -1px #2e3131;
-  border-left: 1px solid #4d5354;
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
-  border-right: 1px solid #353939;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+    transition: 0.1s ease-out;
+    transition-property: background-color, line-height;display: block;
+    padding: 0 20px;
+    line-height: 36px;
+    color: #ddd;
+    text-decoration: none;
+    text-shadow: 0 -1px #2e3131;
+    border-left: 1px solid #4d5354;
+    border-right: 1px solid #353939;
+    cursor: pointer;
 }
 div.mod_journal div.tabs nav a:hover {
-  background: #4d5354;
-  background: rgba(255, 255, 255, 0.5);
+    background: #4d5354;
 }
 div.mod_journal div.tabs nav li a,
 div.mod_journal div.tabs nav a:active {
-  padding: 0 21px;
-  line-height: 33px;
-  color: #eee;
-  background: #323637;
-  border-left: 0;
-  border-right: 0;
-  border-bottom: 3px solid #48a9c0;
-  background-image: linear-gradient(to bottom, #484e4f, #323637);
-  box-shadow: inset 0 -1px #151717, inset 0 -1px 8px rgba(0, 0, 0, 0.2);
+    padding: 0 21px;
+    line-height: 33px;
+    color: #eee;
+    background: #323637;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 3px solid #48a9c0;
+    background-image: linear-gradient(to bottom, #484e4f, #323637);
+    box-shadow: inset 0 -1px #151717, inset 0 -1px 8px rgba(0, 0, 0, 0.2);
 }
 div.mod_journal div.tabs nav li.licol2 a, div.mod_journal div.tabs nav li.licol2 a:active {
-  border-bottom-color: #ed8753;
+    border-bottom-color: #ed8753;
 }
 div.mod_journal div.tabs nav li.licol1 a, div.mod_journal div.tabs nav li.licol1 a:active {
-  border-bottom-color: #ed5753;
+    border-bottom-color: #ed5753;
 }
 div.mod_journal div.tabs nav li.licol3 a, div.mod_journal div.tabs nav li.licol3 a:active {
-  border-bottom-color: #FFB458;
+    border-bottom-color: #FFB458;
 }
 div.mod_journal div.tabs nav li.licol4 a, div.mod_journal div.tabs nav li.licol4 a:active {
-  border-bottom-color: #fcfc74;
+    border-bottom-color: #fcfc74;
 }
 div.mod_journal div.tabs nav li a:hover {
     border-bottom-color: #fff;
 }
 div.mod_journal div.tabs nav li.active a { background: rgba(255, 255, 255, 0.05); }
 
-
-
-
-
-
-/**/
-/* sub / inner tabs */
-/**/
+/**
+  sub / inner tabs 
+**/
 div.innertabs {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: none;
-	font-size: 0;
-	text-align: left;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    font-size: 0;
+    text-align: left;
 }
 div.innertabs > input[type="radio"] {
-	position: absolute;
-	left: -9999px;
+    position: absolute;
+    left: -9999px;
 }
 div.innertabs > label {
-	position: relative;
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: none;
-	cursor: pointer;
-	transition: all 0.1s;
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.1s;
 }
 div.innertabs > input:checked + label {
-	cursor: default;
+    cursor: default;
 }
 div.innertabs > .tab-content-first:checked ~ ul .tab-content-first,
 div.innertabs > .tab-content-2:checked ~ ul .tab-content-2,
@@ -118,142 +103,140 @@ div.innertabs > .tab-content-7:checked ~ ul .tab-content-7,
 div.innertabs > .tab-content-8:checked ~ ul .tab-content-8,
 div.innertabs > .tab-content-9:checked ~ ul .tab-content-9,
 div.innertabs > .tab-content-last:checked ~ ul .tab-content-last {
-	z-index: 1;
-	top: 0;
-	left: 0;
-	opacity: 1;
-	transform: scale(1,1);
-	transform: rotate(0deg);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    transform: scale(1,1);
+    transform: rotate(0deg);
 }
 
 div.innertabs > ul {
-	list-style: none;
-	position: relative;
-	display: block;
-	overflow: hidden;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: none;
-	font-size: 1rem;
-	text-align: left;
+    list-style: none;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    font-size: 1rem;
+    text-align: left;
     background-color: #fff;
 }
 div.innertabs > ul > li {
-	position: absolute;
-	width: 100%;
-	overflow: auto;
-	padding: 30px 40px 40px;
-	box-sizing: border-box;
-	opacity: 0;
-	transition: all 0.5s;
+    position: absolute;
+    width: 100%;
+    overflow: auto;
+    padding: 30px 40px 40px;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: all 0.5s;
 }
 
-/**/
-/* default */
-/**/
+/**
+   default
+**/
 div.innertabs > label {
-	padding: 0 20px;
-	background: #e5e5e5;
-	font-size: 13px;
-	line-height: 49px;
+    padding: 0 20px;
+    background: #e5e5e5;
+    font-size: 13px;
+    line-height: 49px;
 }
 div.innertabs > label:hover {
-	background: #f2f2f2;
+    background: #f2f2f2;
 }
 div.innertabs > input:checked + label {
-	background: #fff;
+    background: #fff;
 }
 div.innertabs-theme-1 > label {
-	margin: 0 5px 5px 0;
-	border-radius: 5px;
-	background: #fff;
-	box-shadow: 1px 2px rgba(0,0,0,0.2);
-	color: #808080;
-	opacity: 0.8;
+    margin: 0 5px 5px 0;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 1px 2px rgba(0,0,0,0.2);
+    color: #808080;
+    opacity: 0.8;
 }
 div.innertabs-theme-1 > label:hover {
-	background: #fff;
-	opacity: 1;
+    background: #fff;
+    opacity: 1;
 }
 div.innertabs-theme-1 > input:checked + label {
-	margin-bottom: 0;
-	color: #2b82d9;
+    margin-bottom: 0;
+    color: #2b82d9;
     box-shadow: 1px 2px rgba(43,130,217,0.5);
-	opacity: 1;
+    opacity: 1;
 }
 div.innertabs-theme-1 > ul {
-	border-radius: 5px;
-	box-shadow: 0 3px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    box-shadow: 0 3px rgba(0,0,0,0.2);
 }
 div.innertabs-theme-1 > .tab-content-first:checked ~ ul {
-	border-top-left-radius: 0;
+    border-top-left-radius: 0;
 }
 @media screen and (max-width: 767px) {
-	div.innertabs-theme-1 > label {
-		margin-right: 0;
-	}
-	div.innertabs-theme-1 > input:checked + label {
-		margin-bottom: 5px;
-		padding-bottom: 0;
-		border-radius: 5px;
-	}
-	div.innertabs-theme-1 > .tab-content-first:checked ~ ul {
-		border-top-left-radius: 5px;
-	}
+    div.innertabs-theme-1 > label {
+            margin-right: 0;
+    }
+    div.innertabs-theme-1 > input:checked + label {
+            margin-bottom: 5px;
+            padding-bottom: 0;
+            border-radius: 5px;
+    }
+    div.innertabs-theme-1 > .tab-content-first:checked ~ ul {
+            border-top-left-radius: 5px;
+    }
 }
 
-/**/
-/* animation effects */
-/**/
+/**
+   animation effects 
+**/
 div.innertabs-effect-scale > ul > li {
-	-webkit-transform: scale(0.1,0.1);
+    transform: scale(0.1,0.1);
 }
 div.innertabs-effect-rotate  > ul > li {
-	-webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 div.innertabs-effect-slide-top > ul > li {
-	top: -40px;
+    top: -40px;
 }
 div.innertabs-effect-slide-right > ul > li {
-	left: 80px;
+    left: 80px;
 }
 div.innertabs-effect-slide-bottom > ul > li {
-	top: 40px;
+    top: 40px;
 }
 div.innertabs-effect-slide-left > ul > li {
-	left: -80px;
+    left: -80px;
 }
 
-
-/**/
-/* height */
-/**/
+/**
+   height 
+**/
 div.innertabs > ul,
 div.innertabs > ul > li {
-	height: 370px;
+    height: 370px;
 }
 
 /*----------------------------------------------------------------------------*/
 /*                               RESPONSIVENESS                               */
 /*----------------------------------------------------------------------------*/
 
-/**/
-/* pad */
-/**/
+/**
+   pad 
+**/
 @media screen and (max-width: 980px) {
 
 }
 
-
-/**/
-/* phone */
-/**/
+/**
+   phone 
+**/
 @media screen and (max-width: 767px) {
-	div.innertabs > label {
-		display: block;
-	}
-	div.innertabs > .right {
-		float: none;
-	}
+    div.innertabs > label {
+        display: block;
+    }
+    div.innertabs > .right {
+        float: none;
+    }
 }
