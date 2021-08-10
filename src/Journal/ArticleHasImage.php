@@ -9,9 +9,9 @@ namespace webbird\journal\Journal;
  *
  * @author bmartino
  */
-class ArticleImage 
+class ArticleHasImage 
 {
     use \webbird\common\PropertyGeneratorTrait;
     
-    public static string $tablename = 'mod_journal_article_image';
+    public static string $tablename = 'mod_journal_articlehasimage';
 }

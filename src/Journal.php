@@ -62,8 +62,18 @@ class Journal
         $this->te->registerFunction('s', function ($key) {
             return $this->getOption($key);
         });
+        // add accessor to bridge
+        $this->te->registerFunction('bridge', function() {
+            return $this->adapter;
+        });
     }
     
+    /**
+     * get all articles for given $sectionID
+     * 
+     * @param int $sectionID
+     * @return array
+     */
     public function getArticles(int $sectionID) : array
     {
         $articles = [];
@@ -97,11 +107,12 @@ class Journal
      */
     public function modify(int $sectionID) : void
     {
+        $pageID = $this->adapter->getPageForSection(sectionID: $sectionID);
         $data = array(
             'curr_tab'  => 'articles',
-            'edit_url'  => 'x',
+            'edit_url'  => $this->adapter->getEditURL(pageID: $pageID),
             'sectionID' => $sectionID,
-            'pageID'    => $this->adapter->getPageForSection(sectionID: $sectionID),
+            'pageID'    => $pageID,
             'base_url'  => $this->adapter->getURL(),
         );
         // additional data
@@ -113,9 +124,6 @@ class Journal
                 break;
 
         }
-echo "FILE [", __FILE__, "] FUNC [", __FUNCTION__, "] LINE [", __LINE__, "]<br /><textarea style=\"width:100%;height:200px;color:#000;background-color:#fff;\">";
-print_r($data['articles']);
-echo "</textarea><br />";        
         echo $this->te->render('modify', array('data'=>$data));
     }
 }

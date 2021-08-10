@@ -30,19 +30,32 @@ class Article
         $data = $result->fetch();
         $this->getParameters($data);
         // attach images 
-        $this->images = $this->getImages();
+        $this->images = $this->getImages($articleID);
+        // get assigned tags
+        $this->tags = $this->getTags($articleID);
     }
     
-    public function getImages() 
+    /**
+     * 
+     * @param int $articleID
+     * @return array
+     */
+    public function getImages(int $articleID) : array
     {
         $queryBuilder = $this->adapter->db()->createQueryBuilder();
         $queryBuilder
             ->select('*')
-            ->from($this->adapter->prefix().ArticleImage::$tablename, 't1')
+            ->from($this->adapter->prefix().ArticleHasImage::$tablename, 't1')
             ->rightJoin('t1', $this->adapter->prefix().Image::$tablename, 't2', 't1.img_id=t2.img_id' )
-            ->where('t1.article_id', $this->article_id)
+            ->where('t1.article_id = ?')
+            ->setParameter(0, $articleID)
         ;
         $resultSet = $queryBuilder->execute();
         return $resultSet->fetchAllAssociative();
+    }
+    
+    public function getTags(int $articleID) : array
+    {
+        return ArticleHasTags::getTagsForArticle($articleID);
     }
 }

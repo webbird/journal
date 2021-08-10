@@ -1,24 +1,30 @@
-.mod_journal table.table{
-    width:100%;
-    border-radius:5px;
+.mod_journal ol {
+    margin-left: 0;
+    padding-left: 0;
 }
-.mod_journal table.table th,
-.mod_journal table.table td {
-    text-align: left;
+.mod_journal li.item-container {
+    display: grid;
+    /*                     #   title  active  img  dates */
+    grid-template-columns: 1em 5fr    3em     2fr  5fr;
+    column-gap: 1em;;
 }
-.mod_journal table.table th,
-.mod_journal table.table td.btnline {
-    height: 36px;
-    background: $dark;
+.mod_journal div.attribute-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--column-width-min), 1fr));
+}
+.mod_journal div.attribute-container:first-child {
+    border-bottom: 1px solid $white;
+}
+.mod_journal li.header {
+    background-color: $dark;
     color: $white;
-    border-top: 1px solid $darkborder;
-    border-bottom: 1px solid $darkbottom;
-    background-image: linear-gradient(to bottom, $dark, #3f4344);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
 }
-.mod_journal table.table th.l2 {
-    background: transparent;
-    color: #000;
-    font-size:1.2em;
-    font-weight:600;
+.mod_journal .title-group {
+    --column-width-min: 15em;
+}
+.mod_journal .images-tags {
+    --column-width-min: 1em;
+}
+.mod_journal .start-end {
+    --column-width-min: 8em;
 }

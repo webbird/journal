@@ -12,9 +12,11 @@ return [
     'Active' => 'Aktiv',
     'Tags' => 'Schlagworte',
     'Images' => 'Bilder',
-    'Starting date' => 'Startdatum',
-    'Expiry date' => 'Endedatum',
-    'Add article' => 'Artikel schreiben'
-    
+    'Starting date' => 'Veröffentlicht von',
+    'Expiry date' => 'Veröffentlicht bis',
+    'Add article' => 'Artikel schreiben',
+    'Order by' => 'Sortierung',
+    'custom' => 'benutzerdefiniert',
+    "o'clock" => 'Uhr',
 ];
 
