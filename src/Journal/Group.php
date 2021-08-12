@@ -9,6 +9,9 @@ namespace webbird\journal\Journal;
  *
  * @author bmartino
  */
-class Group {
-    //put your code here
+class Group 
+{
+    use \webbird\common\PropertyGeneratorTrait;
+    
+    public static string $tablename = 'mod_journal_groups';
 }

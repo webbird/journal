@@ -21,18 +21,25 @@ class Article
         $this->adapter = $adapter;
         $queryBuilder = $adapter->db()->createQueryBuilder();
         $queryBuilder
-            ->select('*')
-            ->from($adapter->prefix().self::$tablename)
-            ->where('article_id = ?')
+            ->select('t1.*, t4.`group_title`')
+            ->from($adapter->prefix().self::$tablename, 't1')
+            ->join('t1', $adapter->prefix().ArticleHasSection::$tablename, 't2', 't1.`article_id`=t2.`article_id`')
+            ->rightJoin('t1', $adapter->prefix().ArticleHasGroups::$tablename, 't3', 't1.`article_id`=t3.`article_id`')
+            ->rightJoin('t3', $adapter->prefix().Group::$tablename, 't4', 't3.`group_id`=t4.`group_id`')
+            ->where('t1.`article_id` = ?')
             ->setParameter(0, $articleID)
         ;
-        $result = $queryBuilder->execute();
-        $data = $result->fetch();
-        $this->getParameters($data);
-        // attach images 
-        $this->images = $this->getImages($articleID);
-        // get assigned tags
-        $this->tags = $this->getTags($articleID);
+        try {
+            $result = $queryBuilder->execute();
+            $data = $result->fetch();
+            $this->getParameters($data);
+            // attach images 
+            $this->images = $this->getImages($articleID);
+            // get assigned tags
+            $this->tags = $this->getTags($articleID);
+        } catch ( \Exception $e ) {
+            
+        }
     }
     
     /**
@@ -42,16 +49,7 @@ class Article
      */
     public function getImages(int $articleID) : array
     {
-        $queryBuilder = $this->adapter->db()->createQueryBuilder();
-        $queryBuilder
-            ->select('*')
-            ->from($this->adapter->prefix().ArticleHasImage::$tablename, 't1')
-            ->rightJoin('t1', $this->adapter->prefix().Image::$tablename, 't2', 't1.img_id=t2.img_id' )
-            ->where('t1.article_id = ?')
-            ->setParameter(0, $articleID)
-        ;
-        $resultSet = $queryBuilder->execute();
-        return $resultSet->fetchAllAssociative();
+        return ArticleHasImages::getImagesForArticle($articleID);
     }
     
     public function getTags(int $articleID) : array

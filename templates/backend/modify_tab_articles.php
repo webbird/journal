@@ -8,16 +8,14 @@
             <div style="text-align:right;font-style:italic">
                 <?php echo $this->t('Order by'), ": <span class=\"\" title=\"", ( $this->s('view_order')=='0' ? $this->t('The setting &quot;custom&quot; allows the manual sorting of articles via up/down arrows.') : '') ,"\">", $this->t($data['orders'][$this->s('view_order')]['order_name']) ?></span>
             </div>
-<?php endif; ?>
             <form name="modify_<?= $this->e('sectionID'); ?>" action="<?= $this->e($data['edit_url']) ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="section_id" value="<?= $this->e('sectionID'); ?>" />
                 <input type="hidden" name="page_id" value="<?= $this->e('pageID'); ?>" />
-<?php if(count($data['articles'])>0): ?>
                 <section>
-                    <ol>
+                    <ol<?php if ($this->s('view_order') == 0): ?> id="sortable-items"<?php endif; ?>>
                         <!-- The first list item is the header of the table -->
                         <li class="item-container header">
-                            <div>#</div>
+                            <div>&nbsp;</div>
                             <div class="attribute-container title-group">
                                 <div><?= $this->t('Title') ?></div>
                                 <div><?= $this->t('Group') ?></div>
@@ -31,20 +29,26 @@
                                 <div><?= $this->t('Starting date') ?></div>
                                 <div><?= $this->t('Expiry date') ?></div>
                             </div>
+                            <div>&nbsp;</div>
+                            <div>&nbsp;</div>
                         </li>
 <?php foreach($data['articles'] as $article): ?>
-                        <li class="item-container">
-                            <div>#</div>
+                        <li class="item-container" id="article__<?= $this->e($article->article_id) ?>">
+                            <div class="draghandle"><span class="fa fas fa-fw fa-arrows-alt-v"></span></div>
                             <div class="attribute-container title-group">
-                                <div><a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>">
+                                <div>
+                                    <a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $this->e($article->article_id); ?>">
                                         <span title="Article ID <?= $article->article_id ?>"><?= $article->title; ?></span>
-                                    </a></div>
-                                <div><a href="<?= $this->e($data['edit_url']) ?>section_id=<?= $this->e($data['sectionID']); ?>&amp;group_id=<?= $article->group_id; ?>&amp;tab=g" title="<?= $this->t('Modify') ?>">
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="<?= $this->e($data['edit_url']) ?>section_id=<?= $this->e($data['sectionID']); ?>&amp;group_id=<?= $article->group_id; ?>&amp;tab=g" title="<?= $this->t('Modify') ?>">
                                         <?= $article->group_title ?>
-                                    </a></div>
+                                    </a>
+                                </div>
                             </div>
                             <div><a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>&amp;active=<?= $article->active!=0 ? '0':'1'; ?>');" title="<?php if ($article->active == 1): echo $this->t('Deactivate article'); else: echo $this->t('Activate article'); endif;?>">
-<?php if ($article->active == 1): ?>
+<?php if ($article->active == 'Y'): ?>
                                     <span class="fa fa-fw fa-check"></span>
 <?php else: ?>
                                     <span class="fa fa-fw fa-eye-slash"></span>
@@ -57,9 +61,28 @@
                                 <div><?= $article->published_when>0 ? $this->bridge()->formatDate($article->published_when, true).' '.$this->t("o'clock") : ''; ?></div>
                                 <div><?= $article->published_until>0 ? $this->bridge()->formatDate($article->published_until, true).' '.$this->t("o'clock") : '' ?></div>
                             </div>
+                            <div>x y z</div>
+                            <div class="draghandle"><i class="fa fas fa-fw fa-arrows-alt-v"></i></div>
                         </li>
 <?php endforeach; ?>
                     </ol>
+                    <div class="btnline">
+                        <div class="mod_news_article_tools"><?php echo self::t('Action') ?>:
+                                <select name="action">
+                                    <option value="" selected="selected"></option>
+                                    <option value="copy"><?php echo self::t('Copy') ?></option>
+                                    <option value="copy_with_tags"><?php echo self::t('Copy with tags') ?></option>
+                                    <option value="move"><?php echo self::t('Move') ?></option>
+                                    <option value="move_with_tags"><?php echo self::t('Move with tags') ?></option>
+                                    <option value="delete"><?php echo self::t('Delete') ?></option>
+                                    <option value="activate"><?php echo self::t('Activate') ?></option>
+                                    <option value="deactivate"><?php echo self::t('Deactivate') ?></option>
+                                    <option value="tags"><?php echo self::t('Assign tags') ?></option>
+                                    <option value="group"><?php echo self::t('Assign group') ?></option>
+                                </select>
+                                <input name="continue" type="submit" onclick="return checkActionAndArticles()" value="<?php echo self::t('Continue') ?>" />
+                             </div>
+                    </div>
                </section>
             </form>
 <?php endif; ?>

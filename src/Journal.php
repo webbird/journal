@@ -79,15 +79,23 @@ class Journal
         $articles = [];
         $queryBuilder = $this->adapter->db()->createQueryBuilder();
         $queryBuilder
-            ->select('article_id')
-            ->from($this->adapter->prefix().Journal\Article::$tablename)
-            ->where('section_id = ?')
+            ->select('t1.`article_id`')
+            ->from($this->adapter->prefix().Journal\Article::$tablename, 't1')
+            ->join('t1', $this->adapter->prefix().Journal\ArticleHasSection::$tablename, 't2', 't1.`article_id`=t2.`article_id`')
+            ->where('t2.`section_id` = ?')
             ->setParameter(0, $sectionID)
+#            ->orderBy()
         ;
-        $stmt = $queryBuilder->execute();
-        while (($row = $stmt->fetchAssociative()) !== false) {
-            $articles[] = new Journal\Article(intval($row['article_id']), $this->adapter);
+     
+        try {
+            $stmt = $queryBuilder->execute();
+            while (($row = $stmt->fetchAssociative()) !== false) {
+                $articles[] = new Journal\Article(intval($row['article_id']), $this->adapter);
+            }
+        } catch ( \Exception $e ) {
+            
         }
+
         return $articles;
     }
     
@@ -115,11 +123,12 @@ class Journal
             'pageID'    => $pageID,
             'base_url'  => $this->adapter->getURL(),
         );
+
         // additional data
         switch($data['curr_tab']) {
             case 'articles':
                 $data['articles'] = $this->getArticles($sectionID);
-                $data['orders'] = Journal\Sortorder::getSortorder($this->adapter);
+                $data['orders'] = Journal\Sortorders::getSortorders();
                 $data['num_articles'] = 0;
                 break;
 

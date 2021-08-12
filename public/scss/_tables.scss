@@ -1,12 +1,16 @@
+/*
+https://www.freecodecamp.org/news/https-medium-com-nakayama-shingo-creating-responsive-tables-with-pure-css-using-the-grid-layout-module-8e0ea8f03e83/
+*/
+
 .mod_journal ol {
     margin-left: 0;
     padding-left: 0;
 }
 .mod_journal li.item-container {
     display: grid;
-    /*                     #   title  active  img  dates */
-    grid-template-columns: 1em 5fr    3em     2fr  5fr;
-    column-gap: 1em;;
+    /*                     #   title  active  img  dates icons drag */
+    grid-template-columns: 1em 6fr    3em     2fr  5fr   2fr   1em;
+    column-gap: .5em;
 }
 .mod_journal div.attribute-container {
     display: grid;
@@ -27,4 +31,10 @@
 }
 .mod_journal .start-end {
     --column-width-min: 8em;
+}
+
+.mod_journal #sortable-items > li > div.draghandle {
+    cursor: move;
+    padding: 0;
+    align-self: end;
 }
