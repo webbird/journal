@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'journal';
+  src:  url('fonts/journal.eot?b13ljp');
+  src:  url('fonts/journal.eot?b13ljp#iefix') format('embedded-opentype'),
+    url('fonts/journal.ttf?b13ljp') format('truetype'),
+    url('fonts/journal.woff?b13ljp') format('woff'),
+    url('fonts/journal.svg?b13ljp#journal') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="j-"], [class*=" j-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'journal' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.j-pencil:before {
+  content: "\e906";
+}
+.j-calendar:before {
+  content: "\e953";
+}
+.j-lock:before {
+  content: "\e98f";
+}
+.j-unlocked:before {
+  content: "\e990";
+}
+.j-wrench:before {
+  content: "\e991";
+}
+.j-bin:before {
+  content: "\e9ac";
+}
+.j-eye:before {
+  content: "\e9ce";
+}
+.j-eye-blocked:before {
+  content: "\e9d1";
+}
+.j-cross:before {
+  content: "\ea0f";
+}
+.j-checkmark:before {
+  content: "\ea10";
+}
+.j-move:before {
+  content: "\ea7f";
+}

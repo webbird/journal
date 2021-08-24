@@ -2,9 +2,22 @@
 @import '_tabs.scss';
 @import '_tables.scss';
 @import '_forms.scss';
+@import 'style.scss';
 
 .mod_journal .sortable-ghost {
     opacity: .5;
     background: $gray;
 }
-
+.mod_journal .j-move::before {
+    display: inline-block;
+    transform: rotateZ(90deg);
+}
+.mod_journal .j-bin {
+    color: $darkred;
+}
+.mod_journal .j-checkmark {
+    color: $green;
+}
+.mod_journal .j-cross {
+    color: $darkred;
+}

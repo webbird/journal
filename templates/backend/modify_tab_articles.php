@@ -1,12 +1,13 @@
 <?php
-    $add_article_button = '<form name="addarticle" action="'.$this->e('edit_url').'" method="post" enctype="multipart/form-data">'.
-                          '<input type="submit" class="btn btn-primary" name="mod_journal_add_article" value="' . $this->t('Add article') . '" />'.
-                          '</form>';
+    $add_article_button = '<form name="addarticle" action="'.$this->e($data['edit_url']).'" method="post">'
+                        . '<input type="hidden" name="jac" value="add_article" />'
+                        . '<input type="submit" class="btn btn-primary" name="mod_journal_add_article_btn" value="' . $this->t('Add article') . '" />'
+                        . '</form>';
 ?>
         <div id="main-tab-content1" class="main-tab-content">
-<?php if(count($data['articles'])>0): echo $add_article_button; ?>
+<?php if(isset($data['articles']) && count($data['articles'])>0): echo $add_article_button; ?>
             <div style="text-align:right;font-style:italic">
-                <?php echo $this->t('Order by'), ": <span class=\"\" title=\"", ( $this->s('view_order')=='0' ? $this->t('The setting &quot;custom&quot; allows the manual sorting of articles via up/down arrows.') : '') ,"\">", $this->t($data['orders'][$this->s('view_order')]['order_name']) ?></span>
+                <?= $this->t('Order by'), ": <span class=\"\" title=\"", ( $this->s('view_order')=='0' ? $this->t('The setting &quot;custom&quot; allows the manual sorting of articles via up/down arrows.') : '') ,"\">", $this->t($data['orders'][$this->s('view_order')]['order_name']) ?></span>
             </div>
             <form name="modify_<?= $this->e('sectionID'); ?>" action="<?= $this->e($data['edit_url']) ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="section_id" value="<?= $this->e('sectionID'); ?>" />
@@ -31,10 +32,11 @@
                             </div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
+                            <div>&nbsp;</div>
                         </li>
 <?php foreach($data['articles'] as $article): ?>
                         <li class="item-container" id="article__<?= $this->e($article->article_id) ?>">
-                            <div class="draghandle"><span class="fa fas fa-fw fa-arrows-alt-v"></span></div>
+                            <div class="draghandle"><span class="j-move"></span></div>
                             <div class="attribute-container title-group">
                                 <div>
                                     <a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $this->e($article->article_id); ?>">
@@ -47,27 +49,36 @@
                                     </a>
                                 </div>
                             </div>
-                            <div><a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>&amp;active=<?= $article->active!=0 ? '0':'1'; ?>');" title="<?php if ($article->active == 1): echo $this->t('Deactivate article'); else: echo $this->t('Activate article'); endif;?>">
-<?php if ($article->active == 'Y'): ?>
-                                    <span class="fa fa-fw fa-check"></span>
-<?php else: ?>
-                                    <span class="fa fa-fw fa-eye-slash"></span>
-<?php endif; ?></a></div>
+                            <div>
+                                <a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>&amp;active=<?= $article->active!=0 ? '0':'1'; ?>');" title="<?php if ($article->active == 1): echo $this->t('Deactivate article'); else: echo $this->t('Activate article'); endif;?>">
+                                    <span class="j-<?php if ($article->active == 'Y'): ?>checkmark<?php else: ?>cross<?php endif; ?>"></span>
+                                </a> 
+                            </div>
                             <div class="attribute-container images-tags">
                                 <div><?= (isset($article->images) && is_array($article->images) ? count($article->images) : '0') ?></div>
                                 <div><?= (isset($article->tags)   && is_array($article->tags)   ? count($article->tags)   : '0') ?></div>
                             </div>
                             <div class="attribute-container start-end">
-                                <div><?= $article->published_when>0 ? $this->bridge()->formatDate($article->published_when, true).' '.$this->t("o'clock") : ''; ?></div>
+                                <div><?= $article->published_when>0  ? $this->bridge()->formatDate($article->published_when, true).' '.$this->t("o'clock")  : ''; ?></div>
                                 <div><?= $article->published_until>0 ? $this->bridge()->formatDate($article->published_until, true).' '.$this->t("o'clock") : '' ?></div>
                             </div>
-                            <div>x y z</div>
-                            <div class="draghandle"><i class="fa fas fa-fw fa-arrows-alt-v"></i></div>
+                            <div>
+                                <a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $this->e($article->article_id); ?>">
+                                    <span class="j-pencil"></span>
+                                </a>
+                                <a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['base_url']) ?>');" title="<?= $this->t('Delete') ?>">
+                                    <span class="j-bin"></span>
+                                </a>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="manage_articles[]" value="<?= $article->article_id ?>" onchange='javascript: document.getElementById("<?= $this->e($data['sectionID']) ?>_all").checked &= this.checked' />
+                            </div>
+                            <div class="draghandle"><span class="j-move"></span></div>
                         </li>
 <?php endforeach; ?>
                     </ol>
                     <div class="btnline">
-                        <div class="mod_news_article_tools"><?php echo self::t('Action') ?>:
+                        <div class="mod_news_article_tools"><?php echo self::t('Marked') ?>:
                                 <select name="action">
                                     <option value="" selected="selected"></option>
                                     <option value="copy"><?php echo self::t('Copy') ?></option>
@@ -80,10 +91,10 @@
                                     <option value="tags"><?php echo self::t('Assign tags') ?></option>
                                     <option value="group"><?php echo self::t('Assign group') ?></option>
                                 </select>
-                                <input name="continue" type="submit" onclick="return checkActionAndArticles()" value="<?php echo self::t('Continue') ?>" />
+                                <input class="btn btn-primary" name="continue" type="submit" onclick="return checkActionAndArticles()" value="<?php echo self::t('Continue') ?>" />
                              </div>
                     </div>
                </section>
             </form>
-<?php endif; ?>
+<?php endif; if(isset($data['form'])): echo $data['form']; endif; ?>
         </div>

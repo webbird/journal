@@ -1,3 +1,36 @@
+.mod_journal form {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-gap: 16px;
+    div.grid {
+        display: grid;
+        grid-column: 1 / span 2;
+    }
+    label{
+        grid-column: 1 / 2;
+    }
+    input[type="text"],
+    input[type="radio"],
+    select,
+    button {
+        grid-column: 2 / 3;
+        border: 1px solid $gray;
+    }
+    hr {
+        border-top: 1px solid $gray;
+        grid-column: 1 / span 3;
+        width: 100%;
+        height: 1px;
+    }
+    textarea {
+        grid-column: 1 / span 3;
+    }
+}
+
+ 
+
+
+
 .mod_journal form > table{
     background-color: $white;
 }
@@ -11,7 +44,6 @@
     background-color: $dark;
     color: $white;
 }
-
 .mod_journal input[type="submit"],
 .mod_journal input[type="button"] {
     background-image: linear-gradient(to bottom, $dark, #323637);

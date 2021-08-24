@@ -1,0 +1,85 @@
+@import "variables";
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?b13ljp');
+  src:  url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?b13ljp#iefix') format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?b13ljp') format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?b13ljp') format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?b13ljp##{$icomoon-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="j-"], [class*=" j-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.j-pencil {
+  &:before {
+    content: $j-pencil; 
+  }
+}
+.j-calendar {
+  &:before {
+    content: $j-calendar; 
+  }
+}
+.j-lock {
+  &:before {
+    content: $j-lock; 
+  }
+}
+.j-unlocked {
+  &:before {
+    content: $j-unlocked; 
+  }
+}
+.j-wrench {
+  &:before {
+    content: $j-wrench; 
+  }
+}
+.j-bin {
+  &:before {
+    content: $j-bin; 
+  }
+}
+.j-eye {
+  &:before {
+    content: $j-eye; 
+  }
+}
+.j-eye-blocked {
+  &:before {
+    content: $j-eye-blocked; 
+  }
+}
+.j-cross {
+  &:before {
+    content: $j-cross; 
+  }
+}
+.j-checkmark {
+  &:before {
+    content: $j-checkmark; 
+  }
+}
+.j-move {
+  &:before {
+    content: $j-move; 
+  }
+}
+

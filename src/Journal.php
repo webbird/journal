@@ -4,70 +4,25 @@ declare(strict_types=1);
 
 namespace webbird\journal;
 
+use \webbird\journal\Journal\Article as Article;
+
 /**
  * Description of Journal
  *
  * @author bmartino
  */
-class Journal 
+class Journal extends Base
 {
+    use UtilitiesTrait;
+   
     const VERSION = '0.1';
-    
-    public    object $adapter;
-    protected object $te;
-    protected object $i18n;
-    protected array  $settings = [
-        'append_title'      => 'N',
-        'block2'            => 'N',
-        'crop'              => 'N',
-        'gallery'           => 'fotorama',
-        'imgmaxsize'        => 123456,
-        'imgmaxwidth'       => 4096,
-        'imgmaxheight'      => 4096,
-        'imgthumbwidth'     => 150,
-        'imgthumbheight'    => 150,
-        'mode'              => 'advanced',
-        'articles_per_page' => 0,
-        'use_second_block'  => 'N',
-        'view'              => 'default',
-        'view_order'        => 0,
-        'subdir'            => 'articles',
-        'image_subdir'      => '.articles',
-    ];
-    
-    /**
-     * constructor
-     */
+
     public function __construct(\Doctrine\DBAL\Connection $conn)
     {
-        // initialize CMSBridge
-        $this->adapter = new \webbird\cmsbridge\Bridge($conn);
-        // initialize constants
-        define('THEME',$this->adapter->getThemeName());
-        // initialize localization
-        $this->i18n = new \webbird\i18n\Translator();
-        $locale = $this->i18n->getLocale();
-        $this->i18n->setDefaultTextdomain('journal');
-        $this->i18n->addTranslationFile(
-                'Array',
-                __DIR__.'/../locales/'.$locale.'/LC_MESSAGES/journal.php'
-        );
-        // initialize template engine
-        $this->te = new \League\Plates\Engine(__DIR__.'/../templates/backend');
-        // add translator
-        $this->te->registerFunction('t', function ($string) {
-            return (empty($string) ?: $this->i18n->translate($string));
-        });
-        // add accessor to settings
-        $this->te->registerFunction('s', function ($key) {
-            return $this->getOption($key);
-        });
-        // add accessor to bridge
-        $this->te->registerFunction('bridge', function() {
-            return $this->adapter;
-        });
+        self::$conn = $conn;
+        $this->init();
     }
-    
+   
     /**
      * get all articles for given $sectionID
      * 
@@ -77,36 +32,25 @@ class Journal
     public function getArticles(int $sectionID) : array
     {
         $articles = [];
-        $queryBuilder = $this->adapter->db()->createQueryBuilder();
-        $queryBuilder
-            ->select('t1.`article_id`')
-            ->from($this->adapter->prefix().Journal\Article::$tablename, 't1')
-            ->join('t1', $this->adapter->prefix().Journal\ArticleHasSection::$tablename, 't2', 't1.`article_id`=t2.`article_id`')
-            ->where('t2.`section_id` = ?')
-            ->setParameter(0, $sectionID)
-#            ->orderBy()
-        ;
-     
         try {
+            $queryBuilder = self::$adapter->db()->createQueryBuilder();
+            $queryBuilder
+                ->select('t1.`article_id`')
+                ->from(self::$adapter->prefix().Journal\Article::$tablename, 't1')
+                ->join('t1', self::$adapter->prefix().Journal\ArticleHasSection::$tablename, 't2', 't1.`article_id`=t2.`article_id`')
+                ->where('t2.`section_id` = ?')
+                ->setParameter(0, $sectionID)
+#            ->orderBy()
+            ;
             $stmt = $queryBuilder->execute();
             while (($row = $stmt->fetchAssociative()) !== false) {
-                $articles[] = new Journal\Article(intval($row['article_id']), $this->adapter);
+                $articles[] = new Journal\Article(intval($row['article_id']));
             }
         } catch ( \Exception $e ) {
-            
+            throw new RuntimeException('DB Error: '.$e->getMessage());
         }
 
         return $articles;
-    }
-    
-    /**
-     * 
-     * @param string $key
-     * @return string
-     */
-    public function getOption(string $key) : string
-    {
-        return (isset($this->settings[$key]) ? (string)$this->settings[$key] : '');
     }
     
     /**
@@ -115,24 +59,53 @@ class Journal
      */
     public function modify(int $sectionID) : void
     {
-        $pageID = $this->adapter->getPageForSection(sectionID: $sectionID);
+        // Defaults
+        $curr_tab = 'articles';
+
+        $action = $this->getAction();
+        if(!empty($action)) {
+            switch($action) {
+                case 'add_article':
+                    #echo Journal\Article::createForm();
+                    break;
+            }
+        }
+        
+        $pageID = self::$adapter->getPageForSection(sectionID: $sectionID);
         $data = array(
-            'curr_tab'  => 'articles',
-            'edit_url'  => $this->adapter->getEditURL(pageID: $pageID),
+            'curr_tab'  => $curr_tab,
+            'edit_url'  => self::$adapter->getEditURL(pageID: $pageID),
             'sectionID' => $sectionID,
             'pageID'    => $pageID,
-            'base_url'  => $this->adapter->getURL(),
+            'base_url'  => self::$adapter->getURL(),
         );
 
         // additional data
         switch($data['curr_tab']) {
             case 'articles':
-                $data['articles'] = $this->getArticles($sectionID);
-                $data['orders'] = Journal\Sortorders::getSortorders();
-                $data['num_articles'] = 0;
+            default:
+                if(isset($_REQUEST['mod_journal_add_article_btn'])) {
+                    $data['form'] = Journal\Article::createForm();
+                } else {
+                    $data['articles'] = $this->getArticles($sectionID);
+                    $data['orders'] = Journal\Sortorders::getSortorders();
+                    $data['num_articles'] = 0;
+                }
                 break;
 
         }
-        echo $this->te->render('modify', array('data'=>$data));
+        echo self::$te->render('modify', array('data'=>$data));
+    }
+    
+    private function getAction() : string
+    {
+        $action = $_POST['jac'] ?? '';
+        $actions = array(
+            'add_article',
+        );
+        if(in_array($action, $actions)) {
+            return (string)$action;
+        }
+        return '';
     }
 }

@@ -4,7 +4,6 @@ return [
     '' => [
         'locales' => [ 'de', 'de_DE' ]
     ],
-    'Action' => 'Aktion',
     'Activate' => 'Aktivieren',
     'Articles' => 'Beiträge',
     'Assign group' => 'Gruppe zuordnen',
@@ -14,8 +13,16 @@ return [
     'Copy with tags' => 'Kopieren inkl. Schlagworte',
     'Deactivate' => 'Deaktivieren',
     'Delete' => 'Löschen',
+    'End date' => 'Veröffentlichen bis',
+    'Long / full text' => 'Lang / Gesamttext',
+    'Marked' => 'Markierte',
     'Move' => 'Verschieben',
     'Move with tags' => 'Verschieben inkl. Schlagworte',
+    'No' => 'Nein',
+    'Preview image' => 'Vorschaubild',
+    'Short / teaser text' => 'Kurz / Teaser-Text',
+    'Start date' => 'Veröffentlichen ab',
+    'Yes' => 'Ja',
     
     'Options' => 'Optionen',
     'Groups' => 'Gruppen',
