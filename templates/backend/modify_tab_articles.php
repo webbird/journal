@@ -7,13 +7,16 @@
         <div id="main-tab-content1" class="main-tab-content">
 <?php if(isset($data['articles']) && count($data['articles'])>0): echo $add_article_button; ?>
             <div style="text-align:right;font-style:italic">
-                <?= $this->t('Order by'), ": <span class=\"\" title=\"", ( $this->s('view_order')=='0' ? $this->t('The setting &quot;custom&quot; allows the manual sorting of articles via up/down arrows.') : '') ,"\">", $this->t($data['orders'][$this->s('view_order')]['order_name']) ?></span>
+                <?= $this->t('Order by'); ?>:
+                <span class="" title="<?= $this->s('view_order')=='6' ? $this->t('The setting &quot;custom&quot; allows the manual sorting of articles via up/down arrows.') : '' ?>">
+                    <?= $this->t($data['orders'][$this->s('view_order')]['order_name']) ?>
+                </span>
             </div>
             <form name="modify_<?= $this->e('sectionID'); ?>" action="<?= $this->e($data['edit_url']) ?>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="section_id" value="<?= $this->e('sectionID'); ?>" />
                 <input type="hidden" name="page_id" value="<?= $this->e('pageID'); ?>" />
                 <section>
-                    <ol<?php if ($this->s('view_order') == 0): ?> id="sortable-items"<?php endif; ?>>
+                    <ol<?php if ($this->s('view_order') == 6): ?> id="sortable-items"<?php endif; ?>>
                         <!-- The first list item is the header of the table -->
                         <li class="item-container header">
                             <div>&nbsp;</div>
@@ -36,10 +39,14 @@
                         </li>
 <?php foreach($data['articles'] as $article): ?>
                         <li class="item-container" id="article__<?= $this->e($article->article_id) ?>">
+                        <?php if ($this->s('view_order') == 6): ?>
                             <div class="draghandle"><span class="j-move"></span></div>
+                        <?php else: ?>
+                            <div></div>
+                        <?php endif; ?>
                             <div class="attribute-container title-group">
                                 <div>
-                                    <a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $this->e($article->article_id); ?>">
+                                    <a href="<?= $this->e($data['edit_url'].$data['delim']) ?>article_id=<?= $this->e($article->article_id); ?>">
                                         <span title="Article ID <?= $article->article_id ?>"><?= $article->title; ?></span>
                                     </a>
                                 </div>
@@ -73,7 +80,11 @@
                             <div>
                                 <input type="checkbox" name="manage_articles[]" value="<?= $article->article_id ?>" onchange='javascript: document.getElementById("<?= $this->e($data['sectionID']) ?>_all").checked &= this.checked' />
                             </div>
+                        <?php if ($this->s('view_order') == 6): ?>
                             <div class="draghandle"><span class="j-move"></span></div>
+                        <?php else: ?>
+                            <div></div>
+                        <?php endif; ?>
                         </li>
 <?php endforeach; ?>
                     </ol>
@@ -96,5 +107,9 @@
                     </div>
                </section>
             </form>
-<?php endif; if(isset($data['form'])): echo $data['form']; endif; ?>
+<?php endif; if(isset($data['form'])): ?>
+            <h2><?= $this->t('Write article') ?></h2>
+<?= $data['form']; ?>
+            <?php include __DIR__.'/backend_gallery.php'; ?>
+<?php endif; ?>
         </div>

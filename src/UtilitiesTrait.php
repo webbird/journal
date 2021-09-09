@@ -4,30 +4,15 @@ declare(strict_types=1);
 
 namespace webbird\journal;
 
+use \webbird\journal\Journal\Settings as Settings;
+
 trait UtilitiesTrait 
 {
     public    static \Doctrine\DBAL\Connection $conn;
     public    static object $adapter;
+    public    static int    $sectionID;
     protected static object $te;
     protected static object $i18n;
-    protected static array  $defaultsettings = [
-        'append_title'      => 'N',
-        'articles_per_page' => 0,
-        'block2'            => 'N',
-        'crop'              => 'N',
-        'gallery'           => 'fotorama',
-        'image_subdir'      => '.articles',
-        'imgmaxsize'        => 123456,
-        'imgmaxwidth'       => 4096,
-        'imgmaxheight'      => 4096,
-        'imgthumbwidth'     => 150,
-        'imgthumbheight'    => 150,
-        'mode'              => 'advanced',
-        'subdir'            => 'articles',
-        'use_second_block'  => 'N',
-        'view'              => 'default',
-        'view_order'        => 0,
-    ];
     
     public function init()
     {
@@ -87,7 +72,7 @@ trait UtilitiesTrait
             });
             // add accessor to settings
             self::$te->registerFunction('s', function ($key) {
-                return $this->getOption($key);
+                return Settings::getSetting($key);
             });
             // add accessor to bridge
             self::$te->registerFunction('bridge', function() {
@@ -97,13 +82,14 @@ trait UtilitiesTrait
         return self::$te;
     }
     
-        /**
-     * 
-     * @param string $key
-     * @return string
-     */
-    public static function getOption(string $key) : string
+    public function setSection(int $sectionID) : self
     {
-        return (isset(self::$settings[$key]) ? (string)self::$settings[$key] : '');
+        self::$sectionID = $sectionID;
+        return $this;
+    }
+    
+    public static function getSection() : int
+    {
+        return self::$sectionID;
     }
 }
