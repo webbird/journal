@@ -34,23 +34,20 @@ class Article extends Base
     #use \webbird\journal\UtilitiesTrait;
     
     public static string $tablename = 'mod_journal_articles';
+    public static string $idfield = 'article_id';
     
     private static $defaults = [
         'article_id' => 0,
-        'active' => 'Y',
-        'position' => 0,
-        'title' => '',
-        'link' => '',
-        'content_short' => '',
-        'content_long' => '',
-        'published_when' => null,
-        'published_until' => null,
-        'posted_when' => null,
-        'posted_by' => null,
-        'views' => 0,
-        'copied_from' => null,
-        'images' => [],
-        'tags' => [],
+        'article_active' => 'Y',
+        'article_position' => 0,
+        'article_title' => '',
+        'article_link' => '',
+        'article_content_short' => '',
+        'article_content_long' => '',
+        'article_views' => 0,
+        'article_copied_from' => null,
+        'article_images' => [],
+        'article_tags' => [],
     ];
     
     public function __construct(?int $articleID=null)
@@ -70,10 +67,9 @@ class Article extends Base
                 $result = $queryBuilder->execute();
                 $data = $result->fetch();
                 $this->getParameters($data);
-                // attach images 
-                $this->images = $this->getImages($articleID);
-                // get assigned tags
-                $this->tags = $this->getTags($articleID);
+                $this->images = $this->getImages($articleID); // attach images 
+                $this->tags = $this->getTags($articleID);     // get tags
+                $this->publishing_dates = $this->getMyPublishingDates($articleID);
             } catch ( \Exception $e ) {
 
             }
@@ -82,16 +78,17 @@ class Article extends Base
         }
     }
     
-    public static function exists(int $articleID) {
-        
-    }
-    
+    /**
+     * 
+     * @param int $articleID
+     * @return type
+     */
     public static function createForm(int $articleID)
     {
         $article = new self($articleID);
         $form = (new Form())
             ->setMethod('post')
-            ->addClass('addarticle')
+            ->addClass('addarticle asgrid')
             ->append(
                 (new Text('title'))
                     ->setId('title')
@@ -193,6 +190,11 @@ class Article extends Base
     public function getImages(int $articleID) : array
     {
         return ArticleHasImages::getImagesForArticle($articleID);
+    }
+    
+    public function getMyPublishingDates(int $articleID) : array
+    {
+        return Publishing::getPublishingDates('article', $articleID);
     }
     
     public function getTags(int $articleID) : array

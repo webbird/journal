@@ -25,12 +25,14 @@ class Group extends Base
     use \webbird\common\PropertyGeneratorTrait;
     
     public static string $tablename = 'mod_journal_groups';
+    public static string $idfield = 'group_id';
     
     private static $defaults = [
         'group_id' => 0,
         'group_active' => 'Y',
         'group_position' => 1,
         'group_title' => '',
+        'group_created' => null,
     ];
     
     public function __construct(?int $groupID=null)
@@ -42,6 +44,11 @@ class Group extends Base
         } else {
             $this->getParameters(self::$defaults);
         }
+    }
+    
+    public function save()
+    {
+        
     }
     
     public static function createForm(int $groupID)

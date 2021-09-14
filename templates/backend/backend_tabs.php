@@ -11,8 +11,8 @@
                 <a href="<?php echo $data['edit_url'].$data['delim']; ?>tab=tags"><span class="fa fa-fw fa-tags"></span> <span><?php echo $this->t('Tags') ?></span></a>
             </li>
 <?php endif; ?>
-            <li class="licol4<?php if($data['curr_tab']=='options'): ?> active<?php endif; ?>">
-                <a href="<?php echo $data['edit_url'].$data['delim']; ?>tab=options"><span class="fa fa-fw fa-wrench"></span> <span><?php echo $this->t('Options') ?></span></a>
+            <li class="licol4<?php if($data['curr_tab']=='settings'): ?> active<?php endif; ?>">
+                <a href="<?php echo $data['edit_url'].$data['delim']; ?>tab=settings"><span class="fa fa-fw fa-wrench"></span> <span><?php echo $this->t('Options') ?></span></a>
             </li>
             <li class="red<?php if($data['curr_tab']=='readme'): ?> active<?php endif; ?>">
                 <a href="<?php echo $data['edit_url'].$data['delim']; ?>tab=readme"><span class="fa fa-fw fa-info-circle"></span> <span><?php echo $this->t('Readme') ?></span></a>

@@ -14,6 +14,9 @@ trait UtilitiesTrait
     protected static object $te;
     protected static object $i18n;
     
+    /**
+     * initialize accessors
+     */
     public function init()
     {
         $this->getAdapter();
@@ -21,14 +24,32 @@ trait UtilitiesTrait
         $this->getTE();
     }
     
+    public function exists(int $id, string $classname)
+    {
+        $result = self::$adapter
+                    ->db()
+                    ->executeQuery(
+                        'SELECT * FROM '.self::$adapter->prefix().$classname::$tablename.' WHERE `'.$classname::$idfield.'`=?',
+                        array($id)
+                    )
+        ;
+        return ($result->fetchOne()>=1);
+    }
+    
+    /***************************************************************************
+     * ACCESSOR FUNCTIONS
+     */
+    
     /**
+     * accessor to CMS Bridge
      * 
      * @return \webbird\cmsbridge\Bridge
+     * @throws \RuntimeException
      */
     public function getAdapter() : \webbird\cmsbridge\Bridge
     {
         if(empty(self::$conn)) {
-            throw new RuntimeException();
+            throw new \RuntimeException();
         }
         if(empty(self::$adapter)) {
             self::$adapter = new \webbird\cmsbridge\Bridge(self::$conn);
@@ -39,6 +60,7 @@ trait UtilitiesTrait
     }
     
     /**
+     * accessor to language class
      * 
      * @return \webbird\i18n\Translator
      */
@@ -58,6 +80,7 @@ trait UtilitiesTrait
     }
     
     /**
+     * accessor to template engine
      * 
      * @return \League\Plates\Engine
      */

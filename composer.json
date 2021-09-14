@@ -21,7 +21,8 @@
         "league/plates": "3.*",
         "webbird/i18n": "dev-main",
         "webbird/cmsbridge": "dev-main",
-        "webbird/common": "dev-master"
+        "webbird/common": "dev-master",
+        "hassankhan/config": "^2.2"
     },
     "autoload": {
         "psr-4": {

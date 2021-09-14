@@ -29,10 +29,7 @@
                                 <div><?= $this->t('Images') ?></div>
                                 <div><?= $this->t('Tags') ?></div>
                             </div>
-                            <div class="attribute-container start-end">
-                                <div><?= $this->t('Starting date') ?></div>
-                                <div><?= $this->t('Expiry date') ?></div>
-                            </div>
+                            <div><?= $this->t('Publishing dates') ?></div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
@@ -57,18 +54,15 @@
                                 </div>
                             </div>
                             <div>
-                                <a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>&amp;active=<?= $article->active!=0 ? '0':'1'; ?>');" title="<?php if ($article->active == 1): echo $this->t('Deactivate article'); else: echo $this->t('Activate article'); endif;?>">
-                                    <span class="j-<?php if ($article->active == 'Y'): ?>checkmark<?php else: ?>cross<?php endif; ?>"></span>
+                                <a href="javascript: confirm_link('<?= $this->t('Are you sure?') ?>', '<?= $this->e($data['edit_url']) ?>article_id=<?= $article->article_id; ?>&amp;active=<?= $article->article_active=='Y'?1:0; ?>');" title="<?php if ($article->article_active == 'Y'): echo $this->t('Deactivate article'); else: echo $this->t('Activate article'); endif;?>">
+                                    <span class="j-<?php if ($article->article_active == 'Y'): ?>checkmark<?php else: ?>cross<?php endif; ?>"></span>
                                 </a> 
                             </div>
                             <div class="attribute-container images-tags">
                                 <div><?= (isset($article->images) && is_array($article->images) ? count($article->images) : '0') ?></div>
                                 <div><?= (isset($article->tags)   && is_array($article->tags)   ? count($article->tags)   : '0') ?></div>
                             </div>
-                            <div class="attribute-container start-end">
-                                <div><?= $article->published_when>0  ? $this->bridge()->formatDate($article->published_when, true).' '.$this->t("o'clock")  : ''; ?></div>
-                                <div><?= $article->published_until>0 ? $this->bridge()->formatDate($article->published_until, true).' '.$this->t("o'clock") : '' ?></div>
-                            </div>
+                            <div><?= count($article->publishing_dates); ?></div>
                             <div>
                                 <a href="<?= $this->e($data['edit_url']) ?>article_id=<?= $this->e($article->article_id); ?>">
                                     <span class="j-pencil"></span>

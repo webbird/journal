@@ -69,10 +69,38 @@ class Journal extends Base
             while (($row = $stmt->fetchAssociative()) !== false) {
                 $groups[] = new Journal\Group(intval($row['group_id']));
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             throw new RuntimeException('DB Error: '.$ex->getMessage());
         }
         return $groups;
+    }
+    
+    /**
+     * 
+     * @param int $sectionID
+     * @return array
+     * @throws \RuntimeException
+     */
+    public function getTags(int $sectionID) : array
+    {
+        $tags = [];
+        try {
+            $queryBuilder = self::$adapter->db()->createQueryBuilder();
+            $queryBuilder
+                ->select('t1.`tag_id`')
+                ->from(self::$adapter->prefix().Journal\Tag::$tablename, 't1')
+                ->join('t1', self::$adapter->prefix().Journal\TagHasSection::$tablename, 't2', 't1.`tag_id`=t2.`tag_id`')
+                ->where('t2.`section_id` = ?')
+                ->setParameter(0, $sectionID)
+                ;
+            $stmt = $queryBuilder->execute();
+            while (($row = $stmt->fetchAssociative()) !== false) {
+                $tags[] = new Journal\Tag(intval($row['tag_id']));
+            }
+        } catch (\Exception $ex) {
+            throw new \RuntimeException('DB Error: '.$ex->getMessage());
+        }
+        return $tags;
     }
     
     /**
@@ -85,18 +113,6 @@ class Journal extends Base
         
         // Defaults
         $curr_tab = filter_input(\INPUT_GET, 'tab', \FILTER_SANITIZE_STRING) ?? 'articles';
-
-        /*
-        $action = $this->getAction();
-        if(!empty($action)) {
-            switch($action) {
-                case 'add_article':
-                    #echo Journal\Article::createForm();
-                    break;
-            }
-        }
-         * 
-         */
         
         $pageID = self::$adapter->getPageForSection(sectionID: $sectionID);
         $data = array(
@@ -108,20 +124,17 @@ class Journal extends Base
             'base_url'  => self::$adapter->getURL(),
             'orders'    => Journal\Sortorders::getSortorders(),
         );
-
-        // additional data
-        switch($data['curr_tab']) {
-            case 'groups':
-                $data = array_merge($data,$this->getGroupTab($sectionID));
-                break;
-            case 'articles':
-            default:
-                $data = array_merge($data,$this->getArticleTab($sectionID));
-                break;
+        
+        // match tab to function
+        $func = 'get'.ucfirst(strtolower($data['curr_tab'])).'Tab';
+        if(!method_exists($this, $func)) {
+            $func = 'getArticleTab';
         }
         echo "FILE [", __FILE__, "] FUNC [", __FUNCTION__, "] LINE [", __LINE__, "]<br /><textarea style=\"width:100%;height:200px;color:#000;background-color:#fff;\">";
-        print_r($data);
+        print_r($func);
         echo "</textarea><br />";
+        $data = array_merge($data,$this->$func($sectionID));
+
         echo self::$te->render('modify', array('data'=>$data));
     }
     
@@ -142,11 +155,11 @@ class Journal extends Base
     }
     
     /**
-     * populate the [Articles] tab
+     * populate [Articles] tab
      * @param int $sectionID
      * @return array
      */
-    private function getArticleTab(int $sectionID) : array
+    private function getArticlesTab(int $sectionID) : array
     {
         $data = [];
         $articleID = filter_input(\INPUT_GET, 'article_id', \FILTER_SANITIZE_NUMBER_INT) ?? null;
@@ -166,15 +179,35 @@ class Journal extends Base
     }
     
     /**
-     * populate the [Groups] tab
+     * populate [Groups] tab
      * @param int $sectionID
      * @return array
      */
-    private function getGroupTab(int $sectionID) : array
+    private function getGroupsTab(int $sectionID) : array
     {
         $data = [];
         $data['groups'] = $this->getGroups($sectionID);
         $data['form'] = Journal\Group::createForm(0);
+        return $data;
+    }
+    
+    /**
+     * populate [Tags] tab
+     * @param int $sectionID
+     * @return array
+     */
+    private function getTagsTab(int $sectionID) : array
+    {
+        $data = [];
+        $data['tags'] = $this->getTags($sectionID);
+        //$data['form'] = Journal\Tag::createForm(0);
+        return $data;
+    }
+    
+    private function getSettingsTab(int $sectionID) 
+    {
+        $data = [];
+        $data['form'] = Journal\Settings::createForm($sectionID);
         return $data;
     }
 }
