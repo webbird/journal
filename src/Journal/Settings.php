@@ -6,22 +6,6 @@ namespace webbird\journal\Journal;
 
 use \webbird\journal\Base as Base;
 
-use \Soatok\Cupcake\Blends\{
-    CheckboxWithLabel,
-    RadioSet
-};
-use \Soatok\Cupcake\Form As Form;
-use \Soatok\Cupcake\Ingredients\{
-    Input\Text,
-    Input\File,
-    Input\Radio,
-    Textarea,
-    SelectTag,
-    Div,
-    PurifiedHtmlBlock,
-    RawHtmlBlock,
-    Label
-};
 
 class Settings extends Base
 {
@@ -55,25 +39,7 @@ class Settings extends Base
      */
     public static function createForm(int $articleID)
     {
-        FormConfigLoader::loadForm('settings', __DIR__.'/settings.form.php');
-        $article = new self($articleID);
-        $form = (new Form())
-            ->setMethod('post')
-            ->addClass('settings asgrid');
         
-        $settings = self::getSettings();
-        foreach($settings as $key => $value) {
-echo "KEY $key VALUE $value<br />";            
-            $form->append(
-                (new Text($key))
-                    ->setId($key)
-                    ->setRequired(true)
-                    ->setValue((string)$value)
-            )
-            ->createAndPrependLabel(self::$i18n->t($key))
-            ;
-        }
-        return $form->render();
     }
     
     /**

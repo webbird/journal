@@ -6,23 +6,6 @@ namespace webbird\journal\Journal;
 
 use \webbird\journal\Base as Base;
 
-use \Soatok\Cupcake\Blends\{
-    CheckboxWithLabel,
-    RadioSet
-};
-use \Soatok\Cupcake\Form As Form;
-use \Soatok\Cupcake\Ingredients\{
-    Input\Text,
-    Input\File,
-    Input\Radio,
-    Textarea,
-    SelectTag,
-    Div,
-    PurifiedHtmlBlock,
-    RawHtmlBlock,
-    Label
-};
-
 /**
  * Description of Article
  *
@@ -52,7 +35,7 @@ class Article extends Base
     
     public function __construct(?int $articleID=null)
     {
-        if($articleID) {
+        if($articleID>0) {
             $queryBuilder = self::$adapter->db()->createQueryBuilder();
             $queryBuilder
                 ->select('t1.*, t4.`group_title`')
@@ -86,100 +69,9 @@ class Article extends Base
     public static function createForm(int $articleID)
     {
         $article = new self($articleID);
-        $form = (new Form())
-            ->setMethod('post')
-            ->addClass('addarticle asgrid')
-            ->append(
-                (new Text('title'))
-                    ->setId('title')
-                    ->setRequired(true)
-                    ->setValue($article->title)
-            )
-            ->createAndPrependLabel(self::$i18n->t('Title'))
-            ->append(
-                (new SelectTag('group'))
-                    ->setId('group')
-            )->createAndPrependLabel(self::$i18n->t('Group'))
-            ->append(
-                (new File('postfoto'))
-                    ->setId('postfoto')
-            )->createAndPrependLabel(self::$i18n->t('Preview image'))
-            ->append(
-                (new Div())
-                    ->append(
-                        (new RadioSet(self::$i18n->t('Active')))
-                            ->addRadio('Y', self::$i18n->t('Yes'), 'active-y', true)
-                            ->addRadio('N', self::$i18n->t('No'), 'active-n')
-                )
-            )->createAndPrependLabel(self::$i18n->t('Active'))
-            ->append(
-                (new Text('startdate'))
-                    ->setId('startdate')
-                    ->setValue($article->published_when)
-            )->createAndPrependLabel(self::$i18n->t('Start date'))
-            ->append(
-                (new Text('enddate'))
-                    ->setId('enddate')
-                    ->setValue($article->published_until)
-            )->createAndPrependLabel(self::$i18n->t('End date'))
-            ->append(
-                (new PurifiedHtmlBlock('<hr />'))
-            )
-            ->append(
-                (new Div())
-                    ->append(
-                        (new Label(self::$i18n->t('Short / teaser text')))
-                    )
-                    ->append(
-                        (new RawHtmlBlock(self::$adapter->getWYSIWYGEditor('short',$article->content_short,'100%','150')))
-                    )
-                    ->addClass('grid')
-            )
-            ->append(
-                (new Div())
-                    ->append(
-                        (new Label(self::$i18n->t('Long / full text')))
-                    )
-                    ->append(
-                        (new RawHtmlBlock(self::$adapter->getWYSIWYGEditor('long',$article->content_long,'100%','600')))
-                    )
-                    ->addClass('grid')
-            )
-        ;
-        // optional block 2
-        if(self::getSetting('block2') == 'Y') {
-            $form->append(
-                (new Div())
-                    ->append(
-                        (new Label(self::$i18n->t('Block2')))
-                    )
-                    ->append(
-                        (new RawHtmlBlock(self::$adapter->getWYSIWYGEditor('block2',$article->block2,'100%','300')))
-                    )
-                    ->addClass('grid')
-            );
-        }
-        // add file upload fields
-        $upload_fields = [];
-        for($i=1;$i<=5;$i++) {
-            $upload_fields[] = new File('file'.$i);
-        }
-        $form
-            ->append(
-                (new PurifiedHtmlBlock('<hr />'))
-            )
-            ->append(
-                (new Div())
-                    ->append(
-                        (new Div())
-                            ->appendArray($upload_fields)
-                    )
-
-                    ->addClass('images')
-
-        );
-
-        return $form->render();
+        echo "FILE [", __FILE__, "] FUNC [", __FUNCTION__, "] LINE [", __LINE__, "]<br /><textarea style=\"width:100%;height:200px;color:#000;background-color:#fff;\">";
+        print_r($article);
+        echo "</textarea><br />";
     }
     
     /**

@@ -1,6 +1,6 @@
 <?php
-    $add_article_button = '<form name="addarticle" action="'.$this->e($data['edit_url']).'" method="post">'
-                        . '<input type="hidden" name="jac" value="add_article" />'
+    $add_article_button = '<form name="addarticle" action="'.$this->e($data['post_url']).'" method="post">'
+                        . '<input type="hidden" name="page_id" value="'.$this->e($data['pageID']).'" />'
                         . '<input type="submit" class="btn btn-primary" name="mod_journal_add_article_btn" value="' . $this->t('Add article') . '" />'
                         . '</form>';
 ?>

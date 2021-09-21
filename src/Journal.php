@@ -104,8 +104,10 @@ class Journal extends Base
     }
     
     /**
+     * render modify page
      * 
      * @param int $sectionID
+     * @return void
      */
     public function modify(int $sectionID) : void
     {
@@ -113,11 +115,11 @@ class Journal extends Base
         
         // Defaults
         $curr_tab = filter_input(\INPUT_GET, 'tab', \FILTER_SANITIZE_STRING) ?? 'articles';
-        
         $pageID = self::$adapter->getPageForSection(sectionID: $sectionID);
         $data = array(
             'curr_tab'  => $curr_tab,
             'edit_url'  => self::$adapter->getEditURL(pageID: $pageID),
+            'post_url'  => self::$adapter->getEditURLPost(),
             'delim'     => self::$adapter->getDelimiter(),
             'sectionID' => $sectionID,
             'pageID'    => $pageID,
@@ -125,17 +127,16 @@ class Journal extends Base
             'orders'    => Journal\Sortorders::getSortorders(),
         );
         
-        // match tab to function
+        // match tab to function; default: articles
         $func = 'get'.ucfirst(strtolower($data['curr_tab'])).'Tab';
         if(!method_exists($this, $func)) {
             $func = 'getArticleTab';
         }
-        echo "FILE [", __FILE__, "] FUNC [", __FUNCTION__, "] LINE [", __LINE__, "]<br /><textarea style=\"width:100%;height:200px;color:#000;background-color:#fff;\">";
-        print_r($func);
-        echo "</textarea><br />";
-        $data = array_merge($data,$this->$func($sectionID));
 
-        echo self::$te->render('modify', array('data'=>$data));
+        // merge default data with tab data
+        $fulldata = array_merge($data,$this->$func($sectionID));
+
+        echo self::$te->render('modify', array('data'=>$fulldata));
     }
     
     /**
@@ -165,10 +166,10 @@ class Journal extends Base
         $articleID = filter_input(\INPUT_GET, 'article_id', \FILTER_SANITIZE_NUMBER_INT) ?? null;
         $addnew = filter_input(\INPUT_POST, 'mod_journal_add_article_btn', \FILTER_SANITIZE_STRING) ?? null;
         if($addnew) {
-            $articleID = 0;
+            $articleID = -1;
         }
         
-        if($articleID) {
+        if(!empty($articleID)) {
             //$data['article'] = new Journal\Article(intval($_REQUEST['article_id']));
             $data['article'] = Journal\Article::createForm(intval($articleID));
         } else {

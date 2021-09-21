@@ -26,6 +26,7 @@ return [
     'Marked' => 'Markierte',
     'Move' => 'Verschieben',
     'Move with tags' => 'Verschieben inkl. Schlagworte',
+    'N' => 'Nein',
     'No' => 'Nein',
     "o'clock" => 'Uhr',
     'Options' => 'Optionen',
@@ -37,5 +38,6 @@ return [
     'Title' => 'Titel',
     'Write article' => 'Beitrag verfassen',
     'Yes' => 'Ja',
+    'Y' => 'Ja',
 ];
 
